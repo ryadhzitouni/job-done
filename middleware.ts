@@ -69,11 +69,10 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * On protège tout le site SAUF :
-     * - Les fichiers internes de Next.js (_next/static, _next/image)
-     * - Le favicon
-     * - Les images (svg, png, jpg...)
+     * On protège UNIQUEMENT le dashboard et la création de missions.
+     * Le reste (accueil, login, images...) devient public.
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/dashboard/:path*",
+    "/mission/:path*",
   ],
 };

@@ -65,7 +65,8 @@ export default function LoginPage() {
 
         if (data.session) {
           router.refresh();
-          router.push("/");
+          // MODIFIÉ : Redirection vers le dashboard après connexion auto
+          router.push("/dashboard");
         } else {
           setMessage({
             text: "Compte créé ! Vérifiez vos emails pour valider.",
@@ -83,7 +84,8 @@ export default function LoginPage() {
         if (error) throw error;
 
         router.refresh();
-        router.push("/");
+        // MODIFIÉ : Redirection vers le dashboard après login
+        router.push("/dashboard");
       }
     } catch (error: any) {
       console.error("Erreur Auth:", error);
@@ -124,56 +126,59 @@ export default function LoginPage() {
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="relative">
+                    {/* AJOUT de text-slate-900 et bg-white */}
                     <input
                       type="text"
                       required={isSignUp}
                       placeholder="Prénom"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
-                      className="w-full p-2.5 text-sm border border-slate-200 rounded-lg outline-none focus:border-blue-500"
+                      className="w-full p-2.5 text-sm border border-slate-200 rounded-lg outline-none focus:border-blue-500 text-slate-900 bg-white"
                     />
                   </div>
                   <div className="relative">
+                    {/* AJOUT de text-slate-900 et bg-white */}
                     <input
                       type="text"
                       required={isSignUp}
                       placeholder="Nom"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
-                      className="w-full p-2.5 text-sm border border-slate-200 rounded-lg outline-none focus:border-blue-500"
+                      className="w-full p-2.5 text-sm border border-slate-200 rounded-lg outline-none focus:border-blue-500 text-slate-900 bg-white"
                     />
                   </div>
                 </div>
               </div>
 
-              {/* 2. PRO & MÉTIER (Adapté pour tout type de pro) */}
+              {/* 2. PRO & MÉTIER */}
               <div>
                 <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1 mt-2">
                   <Briefcase size={12} /> Activité
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="relative">
-                    {/* J'ai mis une étoile à la place du marteau pour faire plus généraliste */}
                     <Star
                       className="absolute left-3 top-3.5 text-slate-400"
                       size={14}
                     />
+                    {/* AJOUT de text-slate-900 et bg-white (et retrait de font-bold inutile ici) */}
                     <input
                       type="text"
                       required={isSignUp}
                       placeholder="Métier (ex: Consultant...)"
                       value={job}
                       onChange={(e) => setJob(e.target.value)}
-                      className="w-full pl-9 p-2.5 text-sm border border-slate-200 rounded-lg outline-none focus:border-blue-500 font-bold text-slate-700"
+                      className="w-full pl-9 p-2.5 text-sm border border-slate-200 rounded-lg outline-none focus:border-blue-500 text-slate-900 bg-white"
                     />
                   </div>
+                  {/* AJOUT de text-slate-900 et bg-white */}
                   <input
                     type="text"
                     required={isSignUp}
                     placeholder="Nom Entreprise"
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
-                    className="w-full p-2.5 text-sm border border-slate-200 rounded-lg outline-none focus:border-blue-500"
+                    className="w-full p-2.5 text-sm border border-slate-200 rounded-lg outline-none focus:border-blue-500 text-slate-900 bg-white"
                   />
                 </div>
               </div>
@@ -189,13 +194,14 @@ export default function LoginPage() {
                       className="absolute left-3 top-3.5 text-slate-400"
                       size={14}
                     />
+                    {/* AJOUT de text-slate-900 et bg-white */}
                     <input
                       type="tel"
                       required={isSignUp}
                       placeholder="Téléphone"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      className="w-full pl-9 p-2.5 text-sm border border-slate-200 rounded-lg outline-none focus:border-blue-500"
+                      className="w-full pl-9 p-2.5 text-sm border border-slate-200 rounded-lg outline-none focus:border-blue-500 text-slate-900 bg-white"
                     />
                   </div>
                   <div className="relative">
@@ -203,13 +209,14 @@ export default function LoginPage() {
                       className="absolute left-3 top-3.5 text-slate-400"
                       size={14}
                     />
+                    {/* AJOUT de text-slate-900 et bg-white */}
                     <input
                       type="text"
                       required={isSignUp}
                       placeholder="Code Postal / Ville"
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
-                      className="w-full pl-9 p-2.5 text-sm border border-slate-200 rounded-lg outline-none focus:border-blue-500"
+                      className="w-full pl-9 p-2.5 text-sm border border-slate-200 rounded-lg outline-none focus:border-blue-500 text-slate-900 bg-white"
                     />
                   </div>
                 </div>
@@ -224,13 +231,14 @@ export default function LoginPage() {
                 className="absolute left-3 top-3.5 text-slate-400"
                 size={18}
               />
+              {/* AJOUT de text-slate-900 et bg-white */}
               <input
                 type="email"
                 required
                 placeholder="Email professionnel"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 p-3 border border-slate-200 rounded-xl outline-none focus:border-blue-500 font-medium"
+                className="w-full pl-10 p-3 border border-slate-200 rounded-xl outline-none focus:border-blue-500 font-medium text-slate-900 bg-white"
               />
             </div>
             <div className="relative">
@@ -238,6 +246,7 @@ export default function LoginPage() {
                 className="absolute left-3 top-3.5 text-slate-400"
                 size={18}
               />
+              {/* AJOUT de text-slate-900 et bg-white */}
               <input
                 type="password"
                 required
@@ -245,7 +254,7 @@ export default function LoginPage() {
                 minLength={6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 p-3 border border-slate-200 rounded-xl outline-none focus:border-blue-500 font-medium"
+                className="w-full pl-10 p-3 border border-slate-200 rounded-xl outline-none focus:border-blue-500 font-medium text-slate-900 bg-white"
               />
             </div>
 
