@@ -52,20 +52,41 @@ export default function MissionFlowPage() {
     setIsLoading(true);
 
     try {
+      // 1. RÉCUPÉRER L'IDENTITÉ DE L'UTILISATEUR (LA SIGNATURE)
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user)
+        throw new Error("Vous devez être connecté pour créer une mission.");
+
+      // 2. CRÉER LE CLIENT (AVEC SIGNATURE)
       setStatusMessage("Enregistrement du client...");
       const { data: clientData, error: clientError } = await supabase
         .from("clients")
-        .insert([{ name: clientName, phone: clientPhone }])
+        .insert([
+          {
+            name: clientName,
+            phone: clientPhone,
+            user_id: user.id, // <--- LA CLÉ MANQUANTE
+          },
+        ])
         .select("id")
         .single();
 
       if (clientError) throw new Error(`Erreur Client: ${clientError.message}`);
       const clientId = clientData.id;
 
+      // 3. CRÉER LA MISSION (AVEC SIGNATURE)
       setStatusMessage("Création de la mission...");
       const { data: missionData, error: missionError } = await supabase
         .from("missions")
-        .insert([{ client_id: clientId, description: description }])
+        .insert([
+          {
+            client_id: clientId,
+            description: description,
+            user_id: user.id, // <--- LA CLÉ MANQUANTE ICI AUSSI
+          },
+        ])
         .select("id")
         .single();
 
@@ -73,6 +94,7 @@ export default function MissionFlowPage() {
         throw new Error(`Erreur Mission: ${missionError.message}`);
       const missionId = missionData.id;
 
+      // 4. L'IA BOSSE
       setStatusMessage("L'IA rédige vos posts...");
 
       const prompt = `
@@ -91,6 +113,7 @@ export default function MissionFlowPage() {
 
       const content = JSON.parse(completion.choices[0].message.content || "{}");
 
+      // 5. SAUVEGARDE FINALE
       setStatusMessage("Sauvegarde...");
       const { error: updateError } = await supabase
         .from("missions")
@@ -104,7 +127,7 @@ export default function MissionFlowPage() {
       if (updateError)
         throw new Error(`Erreur Update IA: ${updateError.message}`);
 
-      alert("🎉 C'est fait !");
+      alert("🎉 Mission validée et sécurisée !");
       router.push("/");
     } catch (error: any) {
       console.error("ERREUR:", error);
@@ -117,7 +140,7 @@ export default function MissionFlowPage() {
 
   return (
     <main className="min-h-screen bg-slate-50 font-sans text-slate-900 flex flex-col pb-10">
-      {/* Header Large */}
+      {/* Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-20">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link
@@ -139,7 +162,6 @@ export default function MissionFlowPage() {
           onSubmit={handleSubmit}
           className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full"
         >
-          {/* Colonne Gauche : Client */}
           <div className="space-y-6">
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-5 h-full">
               <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
@@ -175,7 +197,6 @@ export default function MissionFlowPage() {
             </div>
           </div>
 
-          {/* Colonne Droite : Mission + Bouton */}
           <div className="space-y-6 flex flex-col">
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-5 flex-1">
               <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
